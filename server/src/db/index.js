@@ -1,6 +1,8 @@
 import { db_name } from "../contant.js";
 import mongoose from "mongoose";
 
+//db connection
+
 const connectDb = async() => {
     try {
         const connectionINstance = await mongoose.connect(`${process.env.DB_URL}/${db_name}`);
