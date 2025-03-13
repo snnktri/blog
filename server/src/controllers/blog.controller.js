@@ -30,6 +30,9 @@ export const getAllBlogs = asyncHandler(async (req, res) => {
     }
 
     const blogs = await Blog.find({ author:user }).sort({ createdAt: -1 });
+    return res.status(200).json(
+        new ApiResponse(200, blogs, "Blogs retrieved successfully")
+    );
 });
 
 export const updateBlog = asyncHandler(async(req, res) => {
