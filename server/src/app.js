@@ -24,8 +24,9 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 // routers goes here
+import imageRouter from "./routes/image.route.js"
 
-
+app.use('/api/v1/images', imageRouter);
 
 
 export {app};
