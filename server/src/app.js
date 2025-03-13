@@ -25,8 +25,12 @@ app.use(cookieParser());
 
 // routers goes here
 import imageRouter from "./routes/image.route.js"
+import userRouter from "./routes/user.route.js"
+import blogRouter from "./routes/blog.route.js"
 
+app.use('/api/v1/users', userRouter);
 app.use('/api/v1/images', imageRouter);
+app.use('/api/v1/blogs', blogRouter);
 
 
 export {app};
