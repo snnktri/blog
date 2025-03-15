@@ -12,13 +12,13 @@ dotenv.config(
 export const verifyJWT = async (req, res, next) => {
     try {
         const token = req.cookies?.accessToken || req.headers["authorization"].replace("Bearer ", "");
-        console.log(token);
+        //console.log(token);
 
         if(!token) {
             throw new ApiError(401, "Access token is missing or invalid");
         }
         const decoendToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-        console.log(decoendToken);
+        //console.log(decoendToken);
 
         if(!decoendToken) {
             throw new ApiError(401, "Access token is missing or invalid");
@@ -27,7 +27,7 @@ export const verifyJWT = async (req, res, next) => {
         const user = await User.findById(
             decoendToken.id)
 
-        console.log(user);
+      //  console.log(user);
 
         if(!user) {
             throw new ApiError(404, "User not found");

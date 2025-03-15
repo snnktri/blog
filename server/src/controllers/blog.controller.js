@@ -40,6 +40,8 @@ export const updateBlog = asyncHandler(async(req, res) => {
     const { title, content, image } = req.body;
     const user = req.user._id;
 
+    console.log(_id);
+
     const existUser = await User.findById(user);
     if(!existUser) {
         throw new ApiError(401, "Unauthorized to create blog");
@@ -66,9 +68,55 @@ export const deleteBlog = asyncHandler(async(req, res) => {
     if(!existUser) {
         throw new ApiError(401, "Unauthorized to create blog");
     }
-    const deletedBlog = await Blog.findByIdAndDelete(_id);
+    const deletedBlog = await Blog.findByIdAndDelete({
+        _id,
+        author: user
+    });
 
     if(!deletedBlog) {
         throw new ApiError(404, "Blog not found");
     }
+    return res.status(200).json(new ApiResponse(200, "Blog deleted successfully"));
+});
+
+export const getAllBlogsOfAllUsers = asyncHandler(async(req, res) => {
+    const blogs = await Blog.aggregate([
+        {
+            $lookup: {
+                from: "users",
+                localField: 'author',
+                foreignField: '_id',
+                as: 'authorinfo'
+            }
+        },
+        { $unwind: "$authorinfo" }, 
+        {
+            $lookup: {
+                from: "images",
+                localField: 'image',
+                foreignField: '_id',
+                as: 'imageinfo'
+            }
+        },
+        { $unwind: 
+           { path: "$imageinfo", 
+                preserveNullAndEmptyArrays: true 
+           }
+         },  
+        { 
+            $sort: { "authorinfo.userName": 1, "created_at": -1 } 
+        },
+        {
+            $project: {
+                title: 1,
+                content: 1,
+                image: "$imageinfo.imageUrl",
+                author: { userName: "$authorinfo.userName", email: "$authorinfo.email" }
+            }
+        }
+    ]);
+
+    return res.status(200).json(
+        new ApiResponse(200, blogs, "Blogs retrieved successfully")
+    );
 });
