@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import { GrCloudComputer } from "react-icons/gr";
 import { NavLink } from "react-router";
 import { IoIosMenu } from "react-icons/io";
+import { useSelector } from 'react-redux';
+import { IoPersonCircleSharp } from "react-icons/io5";
 
 const Navbar = () => {
+  const profile = useSelector(state => state.user.profile);
+  //console.log(profile);
   const [isOpen, setIsOpne] = useState(false);
 
   const navItems = (
@@ -11,14 +15,28 @@ const Navbar = () => {
         <NavLink to="/" className={({isActive}) => `${isActive ? 'text-orange-200': 'text-white'} hover:text-orange-300`}>
          Home
         </NavLink>
-        <NavLink to="/login" className={({isActive}) => `${isActive ? 'text-orange-200': 'text-white'} hover:text-orange-300`}>
-         Log In
+        
+        <NavLink to="/blogs" className={({isActive}) => `${isActive ? 'text-orange-200': 'text-white'} hover:text-orange-300`}>
+         Blogs
+        </NavLink>
+        <NavLink to="/about" className={({isActive}) => `${isActive ? 'text-orange-200': 'text-white'} hover:text-orange-300`}>
+         About
         </NavLink>
         <NavLink to="/signup" className={({isActive}) => `${isActive ? 'text-orange-200': 'text-white'} hover:text-orange-300`}>
          Register
         </NavLink>
-        <NavLink to="/about" className={({isActive}) => `${isActive ? 'text-orange-200': 'text-white'} hover:text-orange-300`}>
-         About
+        <NavLink to="/profile" className={({isActive}) => `${isActive ? 'text-orange-200': 'text-white'} hover:text-orange-300 order-first sm:order-none hover:scale-105`}>
+           <div className='h-10 w-10 flex items-center justify-center rounded-full bg-gray-500'>
+           { profile ? (
+              <img 
+              src={profile} 
+              alt="profile" 
+              className='h-full w-full object-cover rounded-full opacity-15' // Ensure image covers the container
+            />
+            ):
+            ( <IoPersonCircleSharp color="black" size={40} />)
+          }
+           </div>
         </NavLink>
     </>
   )
@@ -28,16 +46,17 @@ const Navbar = () => {
           <div className='flex items-center justify-between h-16'>
             <div className='flex flex-row w-full justify-between'>
               <div className='text-xl font-bold'>
-                Blog Website
+                <NavLink to="/">
+                Blog Website</NavLink>
               </div>
               <div className='hidden md:block'>
-                <div className='flex ml-10 items-baseline space-x-2'>
+                <div className='flex ml-10 items-center space-x-2 justify-center'>
                   {navItems}
                 </div>
               </div>
             </div>
-            <div className='md:hidden absolute bg-transparent right-5'>
-              <button onClick={() => {setIsOpne(!isOpen)} } type='button'>
+            <div className='md:hidden absolute bg-transparent right-5 flex justify-center items-center h-auto'>
+              <button onClick={() => {setIsOpne(!isOpen)} } type='button' className='cursor-pointer'>
                 <IoIosMenu size={32} className='fill-white'/>
               </button>
             </div>
@@ -46,7 +65,7 @@ const Navbar = () => {
 
         {
           isOpen&& (
-            <div className='flex flex-col gap-y-2 md:hidden px-6 sm:px-6 pb-2 z-10 absolute right-0 bg-gray-700'>
+            <div className='flex flex-col gap-y-2 md:hidden px-6 sm:px-6 pb-2 z-10 absolute right-0 bg-gray-700 transition ease-in duration-300 delay-300 p-2 rounded-bl-md'>
               {navItems}
             </div>
           )
