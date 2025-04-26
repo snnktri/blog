@@ -99,12 +99,16 @@
 import React, { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { imageUploader } from "../apiHandler/imageApi";
+import { blogCreate } from "../apiHandler/imageApi";
+import BlogPost from "./BlogPost";
+import { useNavigate } from "react-router";
 
 const TextEditor = () => {
   const editorRef = useRef(null); // Reference to the editor instance
   //const [uploadStatus, setUploadStatus] = useState(""); // State to track image upload status
   const [imageUrl, setImageUrl] = useState("");
   const [title, setTitle] = useState("");
+  const navigate = useNavigate();
 
 
 
@@ -138,7 +142,7 @@ const TextEditor = () => {
     }
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     let content;
    if(editorRef.current) {
     content = editorRef.current.getContent();
@@ -153,14 +157,30 @@ const TextEditor = () => {
     content,
     image: imageUrl
    }
-   console.log("blog: ", blog)
+
+   try {
+    const response = await blogCreate(blog);
+    console.log("Response: ", response.data.content);
+    if(response.success) {
+      navigate('/blogPost', {
+        state: { blog: response.data }
+      });
+    }
+
+   } catch (error) {
+    console.log("Error on submitting blog.:", error.message);
+    
+   }
+  // console.log("blog: ", blog)
   }
 
 
 
   return (
-    <div>
-      <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title"/>
+    <div className="min-h-screen w-full bg-gray-200">
+      <h2 className="text-3xl text-center capitalize font-bold">Post Blogs</h2>
+      <div className="flex flex-col p-4">
+      <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" className="p-4 bg-gray-300 m-4 w-[50%] rounded-xl mx-auto"/>
       <Editor
         apiKey="wlv0brmc42eua1cpu6od0ll1ieplkrhmjl5tbaqlvlvg4iv0"
         initialValue="Write something...."
@@ -194,10 +214,16 @@ const TextEditor = () => {
           images_upload_handler: handleImageUpload,
         }}
       />
-      
-      <button onClick={handleClick}>
-        post
+       <button onClick={handleClick}
+      className="cursor-pointer p-4 bg-blue-500 hover:bg-blue-700 m-4 mx-auto w-[50%] md:w-[30%] rounded-xl text-xl uppercase text-white">
+        post Blog
       </button>
+      </div>
+     
+      <div>
+
+      </div>
+      
     </div>
   );
 };
