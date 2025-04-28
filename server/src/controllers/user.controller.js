@@ -132,7 +132,7 @@ const logout = asyncHandler(async (req, res) => {
 
 const protectedUser = asyncHandler(async (req, res) => {
    const user = req.user._id;
-   console.log(user);
+   //console.log(user);
 
    const loggedInUser = await User.findById(user).select("-password -refreshToken");
 
