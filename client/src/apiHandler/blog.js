@@ -8,3 +8,16 @@ export const getBlogById = async (id) => {
         
     }
 }
+
+export const getAllBlog = async () => {
+    try {
+        const tok = localStorage.getItem("token");
+        const response = await api.get(`/blogs/getAll`, {
+            headers: {
+                Authorization: `Bearer ${tok}`
+            }
+        })
+    } catch (error) {
+        
+    }
+}

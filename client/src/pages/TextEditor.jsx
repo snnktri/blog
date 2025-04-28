@@ -99,9 +99,10 @@
 import React, { useRef, useState } from "react";
 import { Editor } from "@tinymce/tinymce-react";
 import { imageUploader } from "../apiHandler/imageApi";
-import { blogCreate } from "../apiHandler/imageApi";
 import BlogPost from "./BlogPost";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { addBlog } from "../feature/blog.slice"
 
 const TextEditor = () => {
   const editorRef = useRef(null); // Reference to the editor instance
@@ -109,6 +110,8 @@ const TextEditor = () => {
   const [imageUrl, setImageUrl] = useState("");
   const [title, setTitle] = useState("");
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
 
 
@@ -142,7 +145,7 @@ const TextEditor = () => {
     }
   };
 
-  const handleClick = async () => {
+  const handleClick = () => {
     let content;
    if(editorRef.current) {
     content = editorRef.current.getContent();
@@ -159,14 +162,9 @@ const TextEditor = () => {
    }
 
    try {
-    const response = await blogCreate(blog);
+    dispatch(addBlog(blog));
     console.log("Response: ", response.data.content);
-    if(response.success) {
-      navigate('/blogPost', {
-        state: { blog: response.data }
-      });
-    }
-
+    
    } catch (error) {
     console.log("Error on submitting blog.:", error.message);
     

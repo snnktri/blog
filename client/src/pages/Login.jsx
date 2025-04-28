@@ -1,6 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { login } from '../apiHandler/user';
+import { useNavigate } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { setUser, setProfile } from "../feature/auth.sclice"
 
 const Login = () => {
+  const dispatch = useDispatch();
   const [loginData, setLoginData] = useState({
     email: '',
     password: ''
@@ -14,12 +19,28 @@ const Login = () => {
       [name]: value
     });
   };
+  const navigate = useNavigate();
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     // Add form submission logic (e.g., API call for login)
-    console.log('Login Data:', loginData);
+    //console.log('Login Data:', loginData);
+    try {
+      const response = await login(loginData);
+      if(response.success) {
+       // console.log(response);
+        dispatch(setUser(response.data.user.firstName));
+        dispatch(setProfile(response.data.user.profile));
+        localStorage.setItem('token', response.data.accessToken);
+        //console.log("data is setup are: ", response.data.user.firstName, response.data.accessToken, response.data.user.profile)
+        navigate('/');
+      } else {
+        alert('Invalid email or password');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (

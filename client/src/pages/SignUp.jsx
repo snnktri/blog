@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-
+import React, { useState } from 'react';
+import { singup } from '../apiHandler/user';
+import { useNavigate} from "react-router"
 const SignUp = () => {
   const [registerData, setRegisterData] = useState({
     firstName: '',
@@ -9,7 +10,9 @@ const SignUp = () => {
     profile: null,
     confirmPassword: '',
   });
-  const [objectUrl, setObjectUrl] = useState()
+  const [objectUrl, setObjectUrl] = useState(null);
+  const navigate = useNavigate();
+
 
   // Handle input changes
   const handleChange = (e) => {
@@ -35,7 +38,7 @@ const SignUp = () => {
   }
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
    
     if (registerData.password !== registerData.confirmPassword) {
@@ -55,17 +58,27 @@ const SignUp = () => {
         formData.append(key, value);
       }
     });
+    try {
+      const response = await singup(formData);
+      if (response.success) {
+        alert('Registration successful!');
+        setRegisterData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          password: '',
+          profile: '',
+          confirmPassword: '',
+        });
+        setObjectUrl(null);
+        navigate('/login');
+      }
 
-    console.log(formData);
-    setRegisterData({
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      profile: '',
-      confirmPassword: '',
-    });
-    setObjectUrl(null)
+    } catch (error) {
+      console.error("Error on registration: ", error.message)
+    }
+   // console.log(formData);
+   
   };
 
   return (
@@ -152,6 +165,10 @@ const SignUp = () => {
             </button>
           </div>
         </form>
+        <div className="text-center mt-4">
+          <p>Already have an account? <span className="text-blue-500 hover:text-blue-600 cursor-ponter" onClick={() => navigate('/login')}>Login</span></p>
+        </div>
+  
       </div>
     </div>
   );
