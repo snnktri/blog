@@ -5,8 +5,11 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 
 export const createBlog = asyncHandler( async (req, res) => {
-    const { title, content, image } = req.body;
+    const { title, content, image='' } = req.body;
+   // console.log(req.body);
     const user = req.user._id;
+   // console.log(image)
+    //console.log(user);
 
     const existUser = await User.findById(user);
     if(!existUser) {
@@ -17,7 +20,7 @@ export const createBlog = asyncHandler( async (req, res) => {
         throw new ApiError(400, "Title and content are required");
     }
 
-    const newBlog = await Blog.create({ title, content, image, author: user });
+    const newBlog = await Blog.create({ title, content, image:image || '', author: user });
 
     return res.status(201).json(new ApiResponse(201, newBlog, "Blog created successfully"));
 });
@@ -120,3 +123,17 @@ export const getAllBlogsOfAllUsers = asyncHandler(async(req, res) => {
         new ApiResponse(200, blogs, "Blogs retrieved successfully")
     );
 });
+
+export const getBlogById = asyncHandler(async(req, res) => {
+    const _id = req.params.id;
+
+    const blog = await Blog.findById(_id);
+    if(!blog) {
+        throw new ApiError(404, "Not found");
+    }
+
+    return res.status(200).
+    json(
+        new ApiResponse(200, blog, "Blog find")
+    );
+})
