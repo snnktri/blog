@@ -12,15 +12,19 @@ export const getBlogs = createAsyncThunk(
     "blog/getBlogs", async() => {
    try {
     const tok = localStorage.getItem("token");
+    if(!tok) {
+        return returnWithValue("No token provided");
+    }
      const response = await api.get("/blogs/getAllBlogs", {
          headers: {
              Authorization: `Bearer ${tok}`
          }
      });
-         console.log(response);
+        // console.log(response);
          return response.data;
    } catch (error) {
     console.log("error")
+    return returnWithValue(error.response?.data||"failed to fetch data");
    }
     }
 )
@@ -108,7 +112,7 @@ const blogSlice = createSlice(
                 .addCase(getBlogs.pending, state=> {state.loading = true})
                 .addCase(getBlogs.fulfilled, (state, action) => {
                     state.loading = false;
-                   // console.log(action.payload.data)
+                    //console.log(action.payload.data)
                     const items = Array.isArray(action.payload.data)? action.payload.data : [];
 
                     state.items = items.map(blog =>

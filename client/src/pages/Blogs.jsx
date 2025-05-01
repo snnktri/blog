@@ -10,7 +10,6 @@ const Blogs = () => {
   //console.log(blogs);
   useEffect(() => {
       dispatch(getBlogs());
-    
    
   }, [dispatch]);
  // console.log("blogs", blogs);

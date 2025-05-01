@@ -10,7 +10,7 @@ const Home = () => {
   useEffect(() => {
     const logHost = async() => {
       const accessToken = localStorage.getItem('token');
-      console.log(accessToken);
+      //console.log(accessToken);
 
       if(!accessToken) return;
 
