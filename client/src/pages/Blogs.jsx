@@ -25,7 +25,7 @@ const Blogs = () => {
               <div dangerouslySetInnerHTML={{ __html: blog.content.slice(0, 100) + "..." }} />
              <div className='w-full flex gap-4'>
               <button className='p-4 bg-white w-3/12 rounded-xl hover:scale-105 transition-transform duration-300 cursor-pointer' onClick={()=>handleUpdate(blog)}>Update</button>
-             <button className='p-4 bg-white w-3/12 rounded-xl hover:scale-105 transition-transform duration-300 cursor-pointer' onClick={()=>(dispatch(deleteBlog(blog._id)))}>Delete</button>
+              <button className='p-4 bg-white w-3/12 rounded-xl hover:scale-105 transition-transform duration-300 cursor-pointer' onClick={()=>(dispatch(deleteBlog(blog._id)))}>Delete</button>
              </div>
              </div>
             ))

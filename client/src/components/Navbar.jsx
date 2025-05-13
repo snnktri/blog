@@ -10,13 +10,21 @@ const Navbar = () => {
   //console.log(profile);
   const [isOpen, setIsOpne] = useState(false);
 
+  const [search, setSearch] = useState("");
+
+  const handleChange = (e) => {
+    e.preventDefault();
+    setSearch(e.target.value);
+    console.log(e.target.value)
+  }
+
   const navItems = (
     <>
         <NavLink to="/" className={({isActive}) => `${isActive ? 'text-orange-200': 'text-white'} hover:text-orange-300`}>
          Home
         </NavLink>
         
-        <NavLink to="/blogs" className={({isActive}) => `${isActive ? 'text-orange-200': 'text-white'} hover:text-orange-300`}>
+        <NavLink to="/getAll" className={({isActive}) => `${isActive ? 'text-orange-200': 'text-white'} hover:text-orange-300`}>
          Blogs
         </NavLink>
         <NavLink to="/about" className={({isActive}) => `${isActive ? 'text-orange-200': 'text-white'} hover:text-orange-300`}>
@@ -45,10 +53,15 @@ const Navbar = () => {
         <nav className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative'>
           <div className='flex items-center justify-between h-16'>
             <div className='flex flex-row w-full justify-between'>
-              <div className='text-xl font-bold'>
+              <div className='text-xl font-bold flex gap-2 justify-center items-center'>
                 <NavLink to="/">
                 Blog Website</NavLink>
+                <div>
+                  <input type="text" className='bg-white text-gray-500 text-sm placeholder:text-gray-700 p-1 w-full capitalize rounded' placeholder='search blog....' onChange={handleChange}
+                  value={search}/>
+                </div>
               </div>
+              
               <div className='hidden md:block'>
                 <div className='flex ml-10 items-center space-x-2 justify-center'>
                   {navItems}

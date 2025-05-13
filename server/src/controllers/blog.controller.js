@@ -29,7 +29,7 @@ export const getAllBlogs = asyncHandler(async (req, res) => {
     const user = req.user._id;
     const existUser = await User.findById(user);
     if(!existUser) {
-        throw new ApiError(401, "Unauthorized to create blog");
+        throw new ApiError(401, "Unauthorized to ask blog");
     }
 
     const blogs = await Blog.find({ author:user }).sort({ createdAt: -1 });
@@ -39,11 +39,13 @@ export const getAllBlogs = asyncHandler(async (req, res) => {
 });
 
 export const updateBlog = asyncHandler(async(req, res) => {
+    //console.log("params", req.params)
     const _id = req.params.id;
     const { title, content, image } = req.body;
     const user = req.user._id;
 
-    console.log(_id);
+    //console.log(_id);
+    console.log(content)
 
     const existUser = await User.findById(user);
     if(!existUser) {
@@ -65,16 +67,23 @@ export const updateBlog = asyncHandler(async(req, res) => {
 });
 
 export const deleteBlog = asyncHandler(async(req, res) => {
-    const _id = req.params.id;
+    const id = req.params.id;
+    console.log(id);
     const user = req.user._id;
+    console.log(user.toString());
+   // const blog = await Blog.findById(id);
+
+   // console.log("blog to delete:", blog)
     const existUser = await User.findById(user);
     if(!existUser) {
         throw new ApiError(401, "Unauthorized to create blog");
     }
     const deletedBlog = await Blog.findByIdAndDelete({
-        _id,
+        _id:id,
         author: user
     });
+
+    console.log(deletedBlog);
 
     if(!deletedBlog) {
         throw new ApiError(404, "Blog not found");

@@ -1,36 +1,10 @@
 import React, { useEffect } from 'react';
 import Explore from "../assets/explore.jpg";
 import { useDispatch } from "react-redux";
-import { setUser, setProfile } from "../feature/auth.sclice";
-import { api } from "../utils/axiosInstance"
+
 
 const Home = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const logHost = async() => {
-      const accessToken = localStorage.getItem('token');
-      //console.log(accessToken);
-
-      if(!accessToken) return;
-
-      try {
-        const response = await api.get("/users/protected", {headers:
-          {
-            Authorization: `Bearer ${accessToken}`
-          }
-        }
-        );
-       // console.log(response.data.data.firstName);
-        dispatch(setUser(response.data.data.firstName));
-        dispatch(setProfile(response.data.data.profile));
-      } catch (error) {
-        console.log("Error on login host: ", error);
-      }
-    }
-
-    logHost();
-  }, [])
+ 
   return (
     <main className='w-full min-h-screen bg-gray-100'>
       <div className='px-4 flex flex-col md:flex-row gap-y-4 md:gap-x-4'>

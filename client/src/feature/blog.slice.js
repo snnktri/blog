@@ -38,7 +38,7 @@ export const updateBlog = createAsyncThunk(
                 Authorization: `Bearer ${tok}`
             }
         });
-        console.log(response.data.data);
+        //console.log(response.data.data);
         return response.data;
     }
 )
@@ -100,6 +100,7 @@ const blogSlice = createSlice(
                 })
                 .addCase(updateBlog.fulfilled, (state, payload) => {
                     state.loading=false;
+                  //  console.log(payload)
                     state.items = state.items.map(blog => blog.id === action.payload.id ? action.payload : blog )
                 })
                 .addCase(deleteBlog.pending, state => {state.loading = true})

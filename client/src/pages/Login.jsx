@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { login } from '../apiHandler/user';
 import { useNavigate } from 'react-router';
 import { useDispatch } from 'react-redux';
-import { setUser, setProfile } from "../feature/auth.sclice"
+import { setUser, setProfile, setUserId } from "../feature/auth.sclice"
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -32,6 +32,7 @@ const Login = () => {
        // console.log(response);
         dispatch(setUser(response.data.user.firstName));
         dispatch(setProfile(response.data.user.profile));
+        dispatch(setUserId(response.data.user._id));
         localStorage.setItem('token', response.data.accessToken);
         //console.log("data is setup are: ", response.data.user.firstName, response.data.accessToken, response.data.user.profile)
         navigate('/');

@@ -5,9 +5,14 @@ import { useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { updateBlog } from '../feature/blog.slice';
 import { imageUploader } from "../apiHandler/imageApi";
+import { useSelector } from 'react-redux';
 
 
 const BlogPost = () => {
+  const userId = useSelector(state => state.user.userId);
+  //console.log(profile);
+  //console.log(user);
+  console.log(userId);
   const dispatch = useDispatch()
     const [imageUrl, setImageUrl] = useState("");
     const {id} = useParams();
@@ -88,6 +93,7 @@ const BlogPost = () => {
       setIsEditable(false);
     }
 
+    console.log("aythor",blog.author)
 
 
   return (
@@ -140,9 +146,13 @@ const BlogPost = () => {
                 <div className='w-full flex flex-col p-4'>
                     <p className='text-xl text-center capitalize font-semibold'>{blog.title}</p>
                     <div dangerouslySetInnerHTML={{ __html: blog.content }} />
-                    <button className="cursor-pointer p-4 bg-blue-500 hover:bg-blue-700 m-4 w-[50%] md:w-[30%] rounded-xl text-xl uppercase text-white mx-auto"
+                    {
+                      userId === blog.author &&
+                      <button className="cursor-pointer p-4 bg-blue-500 hover:bg-blue-700 m-4 w-[50%] md:w-[30%] rounded-xl text-xl uppercase text-white mx-auto"
         onClick={()=>setIsEditable(prev=>!prev)}>update</button>
-                </div>
+                
+                    }
+                    </div>
             )
         }
        
